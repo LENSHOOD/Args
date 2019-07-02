@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -66,6 +67,7 @@ public class Schema {
     }
 
     public Class getFlagClass(String flagName) {
-        return schemaMap.get(flagName).getClazz();
+        SchemaType schemaType = schemaMap.get(flagName);
+        return Objects.isNull(schemaType) ? null : schemaType.getClazz();
     }
 }
