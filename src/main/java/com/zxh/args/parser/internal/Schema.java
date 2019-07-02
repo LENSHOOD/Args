@@ -24,11 +24,11 @@ public class Schema {
         /**
          * Type of flags
          */
-        BOOLEAN("boolean", boolean.class),
-        INTEGER("integer", int.class),
-        INTEGER_ARRAY("integer-array", int[].class),
-        DOUBLE("double", double.class),
-        DOUBLE_ARRAY("double-array", double.class),
+        BOOLEAN("boolean", Boolean.class),
+        INTEGER("integer", Integer.class),
+        INTEGER_ARRAY("integer-array", Integer[].class),
+        DOUBLE("double", Double.class),
+        DOUBLE_ARRAY("double-array", Double[].class),
         STRING("string", String.class),
         STRING_ARRAY("string-array", String[].class);
 

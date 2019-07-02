@@ -15,8 +15,8 @@ public class SchemaTest {
     @Test
     public void validate_new_schema() {
         Schema schema = new Schema(getClass().getClassLoader().getResource("test-schema-1.yml").getPath());
-        assertEquals(boolean.class, schema.getFlagClass("l"));
-        assertEquals(int.class, schema.getFlagClass("p"));
+        assertEquals(Boolean.class, schema.getFlagClass("l"));
+        assertEquals(Integer.class, schema.getFlagClass("p"));
         assertEquals(String.class, schema.getFlagClass("d"));
         assertEquals(String[].class, schema.getFlagClass("g"));
 
