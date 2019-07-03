@@ -23,11 +23,15 @@ public class ParserTest {
     @Test
     public void validate_parse_normal_input() {
         // normal input
-        String args = "-l -p 8080 -d /usr/logs";
+        String args = "-l -p 8080 -s -0.8 -d /usr/logs";
         ParserResult normalResult = parser.parse(args);
         assertEquals(true, normalResult.getValueByFlag("l"));
         assertEquals(8080, normalResult.getValueByFlag("p"));
+        assertEquals(-0.8, normalResult.getValueByFlag("s"));
         assertEquals("/usr/logs", normalResult.getValueByFlag("d"));
+
+        // default output
+        ParserResult defaultResult = parser.parse("");
     }
 
     @Test
@@ -49,11 +53,11 @@ public class ParserTest {
     @Test
     public void validate_array_input() {
         // array input
-        String arrayArgs = "-i 1,2,3 -d 1.0,2.1,3.2 -s 1,2.0,3ab";
+        String arrayArgs = "-i -1,2,3 -d 1.0,-2.1,3.2 -s 1,2.0,3ab";
         parser = new Parser(getClass().getClassLoader().getResource("test-schema-array.yml").getPath());
         ParserResult arrayResult = parser.parse(arrayArgs);
-        assertArrayEquals(new Integer[]{1,2,3}, (Integer[])arrayResult.getValueByFlag("i"));
-        assertArrayEquals(new Double[]{1.0,2.1,3.2}, (Double[])arrayResult.getValueByFlag("d"));
+        assertArrayEquals(new Integer[]{-1,2,3}, (Integer[])arrayResult.getValueByFlag("i"));
+        assertArrayEquals(new Double[]{1.0,-2.1,3.2}, (Double[])arrayResult.getValueByFlag("d"));
         assertArrayEquals(new String[]{"1","2.0","3ab"}, (String[])arrayResult.getValueByFlag("s"));
     }
 }

@@ -6,9 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import static org.junit.Assert.*;
 
 public class AnalyzerTest {
@@ -24,7 +21,7 @@ public class AnalyzerTest {
     }
 
     @Test
-    public void validate_analyze() {
+    public void validate_analyze_correct_input() {
         // single empty
         assertArrayEquals(new String[]{"l", ""}, analyzer.analyze("-l").get(0));
 
@@ -39,16 +36,31 @@ public class AnalyzerTest {
         assertArrayEquals(new String[] {"p", "8080"}, analyzer.analyze("-l -p 8080 -d /usr/logs").get(1));
         assertArrayEquals(new String[] {"d", "/usr/logs"}, analyzer.analyze("-l -p 8080 -d /usr/logs").get(2));
 
+        // minus number
+        assertArrayEquals(new String[]{"p", "-8080"}, analyzer.analyze("-p -8080").get(0));
+        assertArrayEquals(new String[]{"p", "-7.5"}, analyzer.analyze("-p -7.5").get(0));
+        assertArrayEquals(new String[]{"p", "-.06"}, analyzer.analyze("-p -.06").get(0));
+        assertArrayEquals(new String[]{"p", "-.06,-1.1,-0.5"}, analyzer.analyze("-p -.06,-1.1,-0.5").get(0));
 
+        // missing space between flag and value
+        analyzer.analyze("-l-p8080-d/usr/logs");
+        assertArrayEquals(new String[] {"l", ""}, analyzer.analyze("-l-p8080-d/usr/logs").get(0));
+        assertArrayEquals(new String[] {"p", "8080"}, analyzer.analyze("-l-p8080-d/usr/logs").get(1));
+        assertArrayEquals(new String[] {"d", "/usr/logs"}, analyzer.analyze("-l-p8080-d/usr/logs").get(2));
+
+    }
+
+    @Test
+    public void validate_wrong_flag() {
         // wrong args
         expectedException.expect(WrongArgsException.class);
-        analyzer.analyze("l -p 8080 -d /usr/logs");
+        analyzer.analyze("l -p8080 -d /usr/logs");
+    }
 
-        expectedException.expect(WrongArgsException.class);
-        analyzer.analyze("-l -p8080 -d /usr/logs");
-
+    @Test
+    public void validate_wrong_value() {
+        // wrong args
         expectedException.expect(WrongArgsException.class);
         analyzer.analyze("-l -p 8080 8081 -d /usr/logs");
-
     }
 }
