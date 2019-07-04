@@ -22,6 +22,9 @@ public class AnalyzerTest {
 
     @Test
     public void validate_analyze_correct_input() {
+        // no input args
+        assertTrue(analyzer.analyze(" ").isEmpty());
+
         // single empty
         assertArrayEquals(new String[]{"l", ""}, analyzer.analyze("-l").get(0));
 

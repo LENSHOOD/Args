@@ -18,6 +18,10 @@ public class Analyzer {
     public List<String[]> analyze(String args) {
         // truncate space and test if the first character is '-'
         args = args.trim();
+        if (args.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         if (!args.startsWith("-")) {
             throw new WrongArgsException("Wrong arg flag, flag should be prefix by minus character");
         }
