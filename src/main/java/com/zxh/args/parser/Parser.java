@@ -25,7 +25,7 @@ public class Parser {
     }
 
     public ParserResult parse(String args) {
-        ParserResult result = new ParserResult();
+        ParserResult result = buildDefaultParserResult();
         analyzer.analyze(args).forEach(
                 flagAndStringValue -> {
                     String flag = flagAndStringValue[0];
@@ -41,6 +41,12 @@ public class Parser {
                 }
         );
         return result;
+    }
+
+    private ParserResult buildDefaultParserResult() {
+        ParserResult parserResult = new ParserResult();
+        schema.getFlagWithDefaultValue().forEach(parserResult::setFlagValue);
+        return parserResult;
     }
 
     private Object parseForArray(Class clazz, String valueString) {

@@ -29,9 +29,17 @@ public class ParserTest {
         assertEquals(8080, normalResult.getValueByFlag("p"));
         assertEquals(-0.8, normalResult.getValueByFlag("s"));
         assertEquals("/usr/logs", normalResult.getValueByFlag("d"));
+        assertArrayEquals(new String[]{}, (String[])normalResult.getValueByFlag("g"));
 
         // default output
-        ParserResult defaultResult = parser.parse("");
+        String noArgs = "";
+        ParserResult noArgsResult = parser.parse(noArgs);
+        assertEquals(false, noArgsResult.getValueByFlag("l"));
+        assertEquals(0, noArgsResult.getValueByFlag("p"));
+        assertEquals(0.0, noArgsResult.getValueByFlag("s"));
+        assertEquals("", noArgsResult.getValueByFlag("d"));
+        assertArrayEquals(new String[]{}, (String[])noArgsResult.getValueByFlag("g"));
+
     }
 
     @Test
