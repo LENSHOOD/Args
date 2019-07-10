@@ -14,19 +14,16 @@ public class Analyzer {
 
     public static Map<String, String> analyze(String inputArgs) {
         inputArgs = inputArgs.trim();
-
         if (inputArgs.length() == 0) {
             return Collections.emptyMap();
         }
 
-        Matcher inputArgsMatcher = MINUS_ONE_CHAR_PATTERN.matcher(inputArgs);
+        List<String> flagsWithMinus = matchFlags(inputArgs);
+        return getFlagValueMapBy(inputArgs, flagsWithMinus);
+    }
 
-        List<String> flagsWithMinus = new ArrayList<>();
-        while (inputArgsMatcher.find()) {
-            flagsWithMinus.add(inputArgsMatcher.group());
-        }
-
-        Map<String, String> resultMap = new HashMap<>();
+    private static Map<String, String> getFlagValueMapBy(String inputArgs, List<String> flagsWithMinus) {
+        Map<String, String> resultMap = new HashMap<>(16);
         for (int i = 0; i < flagsWithMinus.size(); i++) {
             int flagLastIndex = inputArgs.indexOf(flagsWithMinus.get(i)) + 1;
             int nextFlagFirstIndex = i == flagsWithMinus.size() - 1 ? inputArgs.length() : inputArgs.indexOf(flagsWithMinus.get(i + 1));
@@ -37,7 +34,17 @@ public class Analyzer {
 
             resultMap.put(flagsWithMinus.get(i).substring(1), value);
         }
-
         return resultMap;
     }
+
+    private static List<String> matchFlags(String inputArgs) {
+        Matcher inputArgsMatcher = MINUS_ONE_CHAR_PATTERN.matcher(inputArgs);
+        List<String> flagsWithMinus = new ArrayList<>();
+        while (inputArgsMatcher.find()) {
+            flagsWithMinus.add(inputArgsMatcher.group());
+        }
+        return flagsWithMinus;
+    }
+
+
 }
