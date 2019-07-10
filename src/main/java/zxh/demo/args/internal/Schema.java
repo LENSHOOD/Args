@@ -42,7 +42,7 @@ public class Schema {
         }
     }
 
-    Map<String, SchemaType> schemaMap = new HashMap<>();
+    private Map<String, SchemaType> schemaMap = new HashMap<>();
 
     public Schema(String schemaString) {
         schemaString = schemaString.trim();
