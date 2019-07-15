@@ -1,5 +1,0 @@
-l: boolean
-p: integer
-s: double
-d: string
-g: string-array
