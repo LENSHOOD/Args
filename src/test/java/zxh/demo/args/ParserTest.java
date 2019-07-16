@@ -1,7 +1,75 @@
 package zxh.demo.args;
 
-import static org.junit.Assert.*;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import zxh.demo.args.exception.ParseException;
+
+import static org.junit.Assert.assertEquals;
 
 public class ParserTest {
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void validate_no_build() {
+        expectedException.expect(ParseException.class);
+        expectedException.expectMessage("No build before parse!");
+        new Parser().parse("");
+    }
+
+    @Test
+    @Ignore
+    public void validate_empty_string() {
+        String args = "-b";
+        Parser parser = new Parser();
+        parser.build("b:boolean");
+        ParserResult result = parser.parse(args);
+        assertEquals("", result.getValueByFlag("b"));
+    }
+
+    @Test
+    @Ignore
+    public void validate_integer_string() {
+        String args = "-l 8080";
+        Parser parser = new Parser();
+        parser.build("l:integer");
+        ParserResult result = parser.parse(args);
+        assertEquals("8080", result.getValueByFlag("l"));
+    }
+
+    @Test
+    @Ignore
+    public void validate_minus_double_string() {
+        String args = "-d -20.1";
+        Parser parser = new Parser();
+        parser.build("d:double");
+        ParserResult result = parser.parse(args);
+        assertEquals("-20.1", result.getValueByFlag("d"));
+    }
+
+    @Test
+    public void validate_string() {
+        String args = "-s iamstring";
+        Parser parser = new Parser();
+        parser.build("s:string");
+        ParserResult result = parser.parse(args);
+        assertEquals("iamstring", result.getValueByFlag("s"));
+    }
+
+    @Test
+    @Ignore
+    public void validate_multiple_flag() {
+        String args = "-b -l 8080 -d -20.1 -s iamstring -f -10.1,11,12.0";
+        Parser parser = new Parser();
+        parser.build("b:boolean, l:integer, d:double, s:string, f:double");
+        ParserResult result = parser.parse(args);
+        assertEquals("", result.getValueByFlag("b"));
+        assertEquals("8080", result.getValueByFlag("l"));
+        assertEquals("-20.1", result.getValueByFlag("d"));
+        assertEquals("iamstring", result.getValueByFlag("s"));
+        assertEquals("-10.1,11,12.0", result.getValueByFlag("f"));
+    }
 }
