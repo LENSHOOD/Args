@@ -1,6 +1,7 @@
-package zxh.demo.args.internal;
+package zxh.demo.args.internal.schema;
 
 import zxh.demo.args.internal.exception.BuildSchemaException;
+import zxh.demo.args.internal.schema.internal.StringType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,21 +23,17 @@ public class Schema {
          * typeClass for related class,
          * defaultValue for initial value
          */
-        STRING("string", String.class, "");
+        STRING(StringType.getInstance());
 
-        private String typeName;
+        private AbstractSchemaType type;
 
-        private Class typeClass;
-        private Object defaultValue;
-        SchemaType(String typeName, Class typeClass, Object defaultValue) {
-            this.typeName = typeName;
-            this.typeClass = typeClass;
-            this.defaultValue = defaultValue;
+        SchemaType(AbstractSchemaType type) {
+            this.type = type;
         }
 
-        private static SchemaType getTypeClassByTypeString(String type) {
+        private static SchemaType getTypeByString(String type) {
             return Stream.of(SchemaType.values())
-                    .filter(typeElement -> typeElement.typeName.equalsIgnoreCase(type))
+                    .filter(typeElement -> typeElement.type.getName().equalsIgnoreCase(type))
                     .findFirst()
                     .orElse(null);
         }
@@ -48,12 +45,12 @@ public class Schema {
         buildSchema(schemaString);
     }
 
-    public Class getClassByFlag(String flag) {
+    public AbstractSchemaType getTypeByFlag(String flag) {
         if (Objects.isNull(flag) || !flagTypeMap.containsKey(flag)) {
             return null;
         }
 
-        return flagTypeMap.get(flag).typeClass;
+        return flagTypeMap.get(flag).type;
     }
 
     private void buildSchema(String schemaString) {
@@ -72,7 +69,7 @@ public class Schema {
                         throw new BuildSchemaException(String.format("Invalid schema string: %s, has empty!", flagTypePair));
                     }
 
-                    SchemaType schemaType = SchemaType.getTypeClassByTypeString(type);
+                    SchemaType schemaType = SchemaType.getTypeByString(type);
                     if (Objects.isNull(schemaType)) {
                         throw new BuildSchemaException(String.format("Wrong type %s for: %s", type, flagTypePair));
                     }

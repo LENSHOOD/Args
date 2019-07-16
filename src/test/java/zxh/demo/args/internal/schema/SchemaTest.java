@@ -1,11 +1,12 @@
-package zxh.demo.args.internal;
+package zxh.demo.args.internal.schema;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import zxh.demo.args.internal.exception.BuildSchemaException;
+import zxh.demo.args.internal.schema.internal.StringType;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SchemaTest {
 
@@ -15,7 +16,7 @@ public class SchemaTest {
     @Test
     public void validate_stringSchema() {
         String schemaString = "s:string";
-        assertEquals(String.class, new Schema(schemaString).getClassByFlag("s"));
+        assertEquals(StringType.getInstance(), new Schema(schemaString).getTypeByFlag("s"));
     }
 
     @Test
