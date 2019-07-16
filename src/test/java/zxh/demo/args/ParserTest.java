@@ -21,13 +21,31 @@ public class ParserTest {
     }
 
     @Test
-    @Ignore
-    public void validate_empty_string() {
+    public void validate_boolean() {
         String args = "-b";
         Parser parser = new Parser();
         parser.build("b:boolean");
         ParserResult result = parser.parse(args);
-        assertEquals("", result.getValueByFlag("b"));
+        assertEquals(Boolean.TRUE, result.getValueByFlag("b"));
+    }
+
+    @Test
+    public void validate_wrong_boolean() {
+        String args = "-b yes";
+        Parser parser = new Parser();
+        parser.build("b:boolean");
+        expectedException.expect(ParseException.class);
+        expectedException.expectMessage("Invalid value yes, for boolean flag b!");
+        parser.parse(args);
+    }
+
+    @Test
+    public void validate_boolean_default() {
+        String args = "";
+        Parser parser = new Parser();
+        parser.build("b:boolean");
+        ParserResult result = parser.parse(args);
+        assertEquals(Boolean.FALSE, result.getValueByFlag("b"));
     }
 
     @Test

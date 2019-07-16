@@ -3,7 +3,6 @@ package zxh.demo.args.internal.schema;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import zxh.demo.args.internal.exception.BuildSchemaException;
 import zxh.demo.args.internal.schema.internal.StringType;
 
 import static org.junit.Assert.assertEquals;

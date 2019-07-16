@@ -1,4 +1,4 @@
-package zxh.demo.args.internal.exception;
+package zxh.demo.args.internal.schema;
 
 /**
  * BuildSchemaException:

@@ -1,6 +1,6 @@
 package zxh.demo.args.internal.schema;
 
-import zxh.demo.args.internal.exception.BuildSchemaException;
+import zxh.demo.args.internal.schema.internal.BooleanType;
 import zxh.demo.args.internal.schema.internal.StringType;
 
 import java.util.HashMap;
@@ -15,42 +15,45 @@ import java.util.stream.Stream;
 */
 public class Schema {
 
-    private enum SchemaType {
+    private enum SchemaTypeEnum {
         /**
          * Schema Type Enum
-         * elements:
-         * typeName for name string,
-         * typeClass for related class,
-         * defaultValue for initial value
          */
-        STRING(StringType.getInstance());
+        STRING(StringType.getInstance()),
+        BOOLEAN(BooleanType.getInstance());
 
-        private AbstractSchemaType type;
+        private SchemaType type;
 
-        SchemaType(AbstractSchemaType type) {
+        SchemaTypeEnum(SchemaType type) {
             this.type = type;
         }
 
-        private static SchemaType getTypeByString(String type) {
-            return Stream.of(SchemaType.values())
+        private static SchemaTypeEnum getTypeByString(String type) {
+            return Stream.of(SchemaTypeEnum.values())
                     .filter(typeElement -> typeElement.type.getName().equalsIgnoreCase(type))
                     .findFirst()
                     .orElse(null);
         }
     }
 
-    private Map<String, SchemaType> flagTypeMap = new HashMap<>();
+    private Map<String, SchemaTypeEnum> flagTypeMap = new HashMap<>();
 
     public Schema(String schemaString) {
         buildSchema(schemaString);
     }
 
-    public AbstractSchemaType getTypeByFlag(String flag) {
+    public SchemaType getTypeByFlag(String flag) {
         if (Objects.isNull(flag) || !flagTypeMap.containsKey(flag)) {
             return null;
         }
 
         return flagTypeMap.get(flag).type;
+    }
+
+    public Map<String, Object> getDefaultSchemaMap() {
+        Map<String, Object> defaultSchemaMap = new HashMap<>();
+        flagTypeMap.forEach((k,v) -> defaultSchemaMap.put(k, v.type.getDefault()));
+        return defaultSchemaMap;
     }
 
     private void buildSchema(String schemaString) {
@@ -69,7 +72,7 @@ public class Schema {
                         throw new BuildSchemaException(String.format("Invalid schema string: %s, has empty!", flagTypePair));
                     }
 
-                    SchemaType schemaType = SchemaType.getTypeByString(type);
+                    SchemaTypeEnum schemaType = SchemaTypeEnum.getTypeByString(type);
                     if (Objects.isNull(schemaType)) {
                         throw new BuildSchemaException(String.format("Wrong type %s for: %s", type, flagTypePair));
                     }

@@ -1,11 +1,11 @@
 package zxh.demo.args.internal.schema;
 
 /**
- * AbstractSchemaType:
+ * SchemaType:
  * @author zhangxuhai
  * @date 2019-07-16
 */
-public interface AbstractSchemaType<T> {
+public interface SchemaType<T> {
 
     /**
      * Type name
