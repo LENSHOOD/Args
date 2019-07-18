@@ -2,10 +2,11 @@ package zxh.demo.args;
 
 import zxh.demo.args.exception.ParseException;
 import zxh.demo.args.internal.Analyzer;
-import zxh.demo.args.internal.schema.SchemaType;
 import zxh.demo.args.internal.schema.Schema;
+import zxh.demo.args.internal.schema.SchemaType;
 import zxh.demo.args.internal.schema.internal.exception.InvalidValueException;
 
+import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,23 +29,33 @@ public class Parser {
         ParserResult result = buildDefaultParserResult();
         Map<String, String> flagValueMap = Analyzer.analyze(inputArgs);
         flagValueMap.forEach(
-                (k,v) -> {
-                    SchemaType type = schema.getTypeByFlag(k);
+                (flag,valueOfString) -> {
+                    SchemaType type = schema.getTypeByFlag(flag);
 
                     if (Objects.isNull(type)) {
                         throw new ParseException("Invalid flag: not found in schema!");
                     }
 
                     try {
-                        result.setFlagAndValue(k, type.valueOf(v));
+                        result.setFlagAndValue(flag, convertStringValueToSchemaTypeValue(valueOfString, type));
                     } catch (InvalidValueException e) {
                         throw new ParseException(
-                                String.format("Invalid value %s, for %s flag %s!", v, type.getName(), k));
+                                String.format("Invalid value %s, for %s flag %s!", valueOfString, type.getName(), flag));
                     }
                 }
         );
 
         return result;
+    }
+
+    private Object convertStringValueToSchemaTypeValue(String valueOfString, SchemaType type) {
+        String[] valueArray = valueOfString.split(",");
+        Object resultArray = Array.newInstance(type.getDefault().getClass(), valueArray.length);
+        for (int i = 0; i < valueArray.length; i++) {
+            Array.set(resultArray, i, type.valueOf(valueArray[i]));
+        }
+
+        return valueArray.length == 1 ? Array.get(resultArray, 0) : resultArray;
     }
 
     private ParserResult buildDefaultParserResult() {
