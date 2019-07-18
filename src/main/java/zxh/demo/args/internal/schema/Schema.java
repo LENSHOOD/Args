@@ -1,6 +1,8 @@
 package zxh.demo.args.internal.schema;
 
 import zxh.demo.args.internal.schema.internal.BooleanType;
+import zxh.demo.args.internal.schema.internal.DoubleType;
+import zxh.demo.args.internal.schema.internal.IntegerType;
 import zxh.demo.args.internal.schema.internal.StringType;
 
 import java.util.HashMap;
@@ -20,7 +22,9 @@ public class Schema {
          * Schema Type Enum
          */
         STRING(StringType.getInstance()),
-        BOOLEAN(BooleanType.getInstance());
+        BOOLEAN(BooleanType.getInstance()),
+        INTEGER(IntegerType.getInstance()),
+        DOUBLE(DoubleType.getInstance());
 
         private SchemaType type;
 

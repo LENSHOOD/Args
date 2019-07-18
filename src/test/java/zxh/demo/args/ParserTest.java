@@ -49,14 +49,46 @@ public class ParserTest {
     }
 
     @Test
-    @Ignore
-    public void validate_integer_string() {
-        String args = "-l 8080";
+    public void validate_integer_double() {
+        String args = "-l 8080 -d -20.1";
         Parser parser = new Parser();
-        parser.build("l:integer");
+        parser.build("l:integer, d:double");
         ParserResult result = parser.parse(args);
-        assertEquals("8080", result.getValueByFlag("l"));
+        assertEquals(8080, result.getValueByFlag("l"));
+        assertEquals(-20.1, result.getValueByFlag("d"));
     }
+
+    @Test
+    public void validate_wrong_integer() {
+        String args = "-l a8b0c8d0 -d -20.1";
+        Parser parser = new Parser();
+        parser.build("l:integer, d:double");
+        expectedException.expect(ParseException.class);
+        expectedException.expectMessage("Invalid value a8b0c8d0, for integer flag l!");
+        parser.parse(args);
+    }
+
+    @Test
+    public void validate_wrong_double() {
+        String args = "-l 8080 -d";
+        Parser parser = new Parser();
+        parser.build("l:integer, d:double");
+        expectedException.expect(ParseException.class);
+        expectedException.expectMessage("Invalid value , for double flag d!");
+        parser.parse(args);
+    }
+
+
+    @Test
+    public void validate_default_integer_double() {
+        String args = "";
+        Parser parser = new Parser();
+        parser.build("l:integer, d:double");
+        ParserResult result = parser.parse(args);
+        assertEquals(0, result.getValueByFlag("l"));
+        assertEquals(0.0, result.getValueByFlag("d"));
+    }
+
 
     @Test
     @Ignore
