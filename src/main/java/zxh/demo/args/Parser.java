@@ -1,9 +1,8 @@
 package zxh.demo.args;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import zxh.demo.args.internal.analyzer.Analyzer;
+
+import java.util.Map;
 
 /**
  * Parser:
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
 public class Parser {
 
     class ParserException extends RuntimeException {
-        public ParserException(String message) {
+        ParserException(String message) {
             super(message);
         }
     }
@@ -25,23 +24,20 @@ public class Parser {
 
     public ParserResult parse(String inputArgs) {
         inputArgs = inputArgs.trim();
-        Pattern pattern = Pattern.compile("-[a-zA-Z]");
-        Matcher matcher = pattern.matcher(inputArgs);
-        List<String> minusFlags = new ArrayList<>();
-        while (matcher.find()) {
-            minusFlags.add(matcher.group());
-        }
 
+
+        Map<String, String> analyzeResult;
+        try {
+            analyzeResult = Analyzer.analyze(inputArgs);
+        } catch (Analyzer.AnalyzeException e) {
+            throw new ParserException(e.getMessage());
+        }
+        return buildParserResult(analyzeResult);
+    }
+
+    private ParserResult buildParserResult(Map<String, String > flagValueMap) {
         ParserResult parserResult = new ParserResult();
-        for (int i = 0; i < minusFlags.size(); i++) {
-            int currentValueStartIndex = inputArgs.indexOf(minusFlags.get(i)) + 2;
-            int currentValueEndIndex = i < minusFlags.size() - 1
-                    ? inputArgs.indexOf(minusFlags.get(i + 1))
-                    : inputArgs.length();
-
-            parserResult.setFlagAndValue(minusFlags.get(i).substring(1,2),
-                    inputArgs.substring(currentValueStartIndex, currentValueEndIndex).trim());
-        }
+        flagValueMap.forEach(parserResult::setFlagAndValue);
         return parserResult;
     }
 }
