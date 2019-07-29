@@ -56,4 +56,10 @@ public class Schema {
 
         return flagTypeMap.get(flag);
     }
+
+    public Map<String, Object> getFlagDefaults() {
+        Map<String, Object> resultMap = new HashMap<>();
+        flagTypeMap.forEach((k, v) -> resultMap.put(k, v.getDefault()));
+        return resultMap;
+    }
 }

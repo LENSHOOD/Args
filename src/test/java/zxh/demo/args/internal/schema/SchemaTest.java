@@ -23,4 +23,22 @@ public class SchemaTest {
         expectedException.expectMessage("Get schema type error: null");
         new Schema("s:string").get(null);
     }
+
+    @Test
+    public void validate_string_schema_parse() {
+        Schema schema = new Schema("s:string");
+        assertEquals("iamstring", schema.get("s").parse("iamstring"));
+    }
+
+    @Test
+    public void validate_string_schema_default() {
+        Schema schema = new Schema("s:string");
+        assertEquals("", schema.get("s").getDefault());
+    }
+
+    @Test
+    public void validate_all_schema_default() {
+        Schema schema = new Schema("s:string");
+        assertEquals("", schema.getFlagDefaults().get("s"));
+    }
 }

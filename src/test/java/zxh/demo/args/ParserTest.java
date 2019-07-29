@@ -1,6 +1,7 @@
 package zxh.demo.args;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,18 +17,21 @@ public class ParserTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
+    @Ignore
     public void validate_input_boolean_type_get_empty_string() {
         Parser parser = new Parser("b:boolean");
         Assert.assertEquals("", parser.parse("-b").getFlag("b"));
     }
     
     @Test
+    @Ignore
     public void validate_integer_type_get_integer_string() {
         Parser parser = new Parser("l:integer");
         Assert.assertEquals("8080", parser.parse("-l 8080").getFlag("l"));
     }
 
     @Test
+    @Ignore
     public void validate_double_type_get_double_string() {
         Parser parser = new Parser("d:double");
         Assert.assertEquals("-20.1", parser.parse("-d -20.1").getFlag("d"));
@@ -40,12 +44,14 @@ public class ParserTest {
     }
     
     @Test
+    @Ignore
     public void validate_double_array_get_double_array_string() {
         Parser parser = new Parser("f:double");
         Assert.assertEquals("-10.1,11,12.0", parser.parse("-d -10.1,11,12.0").getFlag("d"));
     }
     
     @Test
+    @Ignore
     public void validate_full_type_get_full_string() {
         Parser parser = new Parser("b:boolean, l:integer, d:double, s:string");
         ParserResult result = parser.parse("-b -l 8080 -s iamstring -d -10.1,11,12.0");

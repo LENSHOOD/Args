@@ -9,13 +9,13 @@ import java.util.Map;
  * @date 2019-07-25
 */
 public class ParserResult {
-    Map<String, String> flagValueMap = new HashMap<>();
+    private Map<String, Object> flagValueMap = new HashMap<>();
 
-    void setFlagAndValue(String flag, String value) {
+    void setFlagAndValue(String flag, Object value) {
         flagValueMap.put(flag, value);
     }
 
-    public String getFlag(String flag) {
+    public Object getFlag(String flag) {
         return flagValueMap.get(flag);
     }
 }

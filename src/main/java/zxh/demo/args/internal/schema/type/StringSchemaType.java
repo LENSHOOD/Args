@@ -7,6 +7,8 @@ package zxh.demo.args.internal.schema.type;
 */
 public class StringSchemaType {
 
+    private static final String DEFAULT = "";
+
     private static final StringSchemaType SELF = new StringSchemaType();
 
     private StringSchemaType() {
@@ -15,5 +17,13 @@ public class StringSchemaType {
 
     public static StringSchemaType getInstance() {
         return SELF;
+    }
+
+    public String parse(String input) {
+        return input;
+    }
+
+    public String getDefault() {
+        return DEFAULT;
     }
 }

@@ -1,6 +1,7 @@
 package zxh.demo.args;
 
 import zxh.demo.args.internal.analyzer.Analyzer;
+import zxh.demo.args.internal.schema.Schema;
 
 import java.util.Map;
 
@@ -11,6 +12,8 @@ import java.util.Map;
 */
 public class Parser {
 
+    private Schema schema;
+
     class ParserException extends RuntimeException {
         ParserException(String message) {
             super(message);
@@ -19,25 +22,27 @@ public class Parser {
 
 
     public Parser(String schemaString) {
-
+        schema = new Schema(schemaString);
     }
 
     public ParserResult parse(String inputArgs) {
         inputArgs = inputArgs.trim();
 
-
-        Map<String, String> analyzeResult;
+        ParserResult result = buildParserResult(schema.getFlagDefaults());
         try {
-            analyzeResult = Analyzer.analyze(inputArgs);
+            Analyzer.analyze(inputArgs).forEach(
+                    (k, v) -> result.setFlagAndValue(k, schema.get(k).parse(v))
+            );
+
         } catch (Analyzer.AnalyzeException e) {
             throw new ParserException(e.getMessage());
         }
-        return buildParserResult(analyzeResult);
+        return result;
     }
 
-    private ParserResult buildParserResult(Map<String, String > flagValueMap) {
+    private ParserResult buildParserResult(Map<String, Object> flagDefaultValueMap) {
         ParserResult parserResult = new ParserResult();
-        flagValueMap.forEach(parserResult::setFlagAndValue);
+        flagDefaultValueMap.forEach(parserResult::setFlagAndValue);
         return parserResult;
     }
 }
