@@ -1,5 +1,7 @@
 package zxh.demo.args.internal.schema;
 
+import zxh.demo.args.internal.schema.type.BooleanSchemaType;
+import zxh.demo.args.internal.schema.type.SchemaType;
 import zxh.demo.args.internal.schema.type.StringSchemaType;
 
 import java.util.HashMap;
@@ -13,12 +15,13 @@ import java.util.stream.Stream;
 */
 public class Schema {
 
-    private static final Map<String, StringSchemaType> TYPE_MAP = new HashMap<>();
+    private static final Map<String, SchemaType> TYPE_MAP = new HashMap<>();
     static {
         TYPE_MAP.put("string", StringSchemaType.getInstance());
+        TYPE_MAP.put("boolean", BooleanSchemaType.getInstance());
     }
 
-    private Map<String, StringSchemaType> flagTypeMap = new HashMap<>();
+    private Map<String, SchemaType> flagTypeMap = new HashMap<>();
 
     class SchemaException extends RuntimeException {
         SchemaException(String message) {
@@ -39,7 +42,7 @@ public class Schema {
             }
 
             String flag = flagAndTypeString[0];
-            StringSchemaType type = TYPE_MAP.get(flagAndTypeString[1]);
+            SchemaType type = TYPE_MAP.get(flagAndTypeString[1]);
 
             if (type == null) {
                 return;
@@ -49,7 +52,7 @@ public class Schema {
         });
     }
 
-    public StringSchemaType get(String flag) {
+    public SchemaType get(String flag) {
         if (flag == null) {
             throw new SchemaException("Get schema type error: null");
         }

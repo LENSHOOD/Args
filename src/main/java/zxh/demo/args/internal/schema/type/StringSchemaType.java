@@ -5,7 +5,7 @@ package zxh.demo.args.internal.schema.type;
  * @author zhangxuhai
  * @date 2019-07-28
 */
-public class StringSchemaType {
+public class StringSchemaType extends SchemaType<String> {
 
     private static final String DEFAULT = "";
 
@@ -19,10 +19,12 @@ public class StringSchemaType {
         return SELF;
     }
 
+    @Override
     public String parse(String input) {
         return input;
     }
 
+    @Override
     public String getDefault() {
         return DEFAULT;
     }
