@@ -23,17 +23,15 @@ public class ParserTest {
     }
     
     @Test
-    @Ignore
     public void validate_integer_type_get_integer_string() {
         Parser parser = new Parser("l:integer");
-        Assert.assertEquals("8080", parser.parse("-l 8080").getFlag("l"));
+        Assert.assertEquals(8080, parser.parse("-l 8080").getFlag("l"));
     }
 
     @Test
-    @Ignore
     public void validate_double_type_get_double_string() {
         Parser parser = new Parser("d:double");
-        Assert.assertEquals("-20.1", parser.parse("-d -20.1").getFlag("d"));
+        Assert.assertEquals(-20.1, parser.parse("-d -20.1").getFlag("d"));
     }
     
     @Test

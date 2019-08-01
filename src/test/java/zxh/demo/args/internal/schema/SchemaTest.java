@@ -7,6 +7,8 @@ import zxh.demo.args.internal.schema.type.BooleanSchemaType;
 import zxh.demo.args.internal.schema.type.SchemaTypeException;
 import zxh.demo.args.internal.schema.type.StringSchemaType;
 
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class SchemaTest {
@@ -60,8 +62,42 @@ public class SchemaTest {
     }
 
     @Test
+    public void validate_number_schema_parse() {
+        Schema schema = new Schema("i:integer, d:double");
+        assertEquals(8080, schema.get("i").parse("8080"));
+        assertEquals(-20.1, schema.get("d").parse("-20.1"));
+    }
+
+    @Test
+    public void validate_number_schema_default() {
+        Schema schema = new Schema("i:integer, d:double");
+        assertEquals(0, schema.get("i").getDefault());
+        assertEquals(0.0, schema.get("d").getDefault());
+    }
+
+    @Test
+    public void validate_wrong_number_schema() {
+        Schema schema = new Schema("i:integer, d:double");
+        expectedException.expect(SchemaTypeException.class);
+        expectedException.expectMessage("Get schema type error: For input string: \"a8b0c8d0\"");
+        schema.get("i").parse("a8b0c8d0");
+    }
+
+    @Test
+    public void validate_empty_number_schema() {
+        Schema schema = new Schema("i:integer, d:double");
+        expectedException.expect(SchemaTypeException.class);
+        expectedException.expectMessage("Get schema type error: empty String");
+        schema.get("d").parse("");
+    }
+
+    @Test
     public void validate_all_schema_default() {
-        Schema schema = new Schema("s:string");
-        assertEquals("", schema.getFlagDefaults().get("s"));
+        Schema schema = new Schema("s:string, b:boolean, i:integer, d:double");
+        Map<String, Object> resultMap = schema.getFlagDefaults();
+        assertEquals("", resultMap.get("s"));
+        assertEquals(Boolean.FALSE, resultMap.get("b"));
+        assertEquals(0, resultMap.get("i"));
+        assertEquals(0.0, resultMap.get("d"));
     }
 }

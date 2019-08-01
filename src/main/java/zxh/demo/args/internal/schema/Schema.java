@@ -1,8 +1,6 @@
 package zxh.demo.args.internal.schema;
 
-import zxh.demo.args.internal.schema.type.BooleanSchemaType;
-import zxh.demo.args.internal.schema.type.SchemaType;
-import zxh.demo.args.internal.schema.type.StringSchemaType;
+import zxh.demo.args.internal.schema.type.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +17,8 @@ public class Schema {
     static {
         TYPE_MAP.put("string", StringSchemaType.getInstance());
         TYPE_MAP.put("boolean", BooleanSchemaType.getInstance());
+        TYPE_MAP.put("integer", IntegerSchemaType.getInstance());
+        TYPE_MAP.put("double", DoubleSchemaType.getInstance());
     }
 
     private Map<String, SchemaType> flagTypeMap = new HashMap<>();
@@ -41,8 +41,8 @@ public class Schema {
                 throw new SchemaException(String.format("Build schema error, wrong flag type pair: %s", element));
             }
 
-            String flag = flagAndTypeString[0];
-            SchemaType type = TYPE_MAP.get(flagAndTypeString[1]);
+            String flag = flagAndTypeString[0].trim();
+            SchemaType type = TYPE_MAP.get(flagAndTypeString[1].trim());
 
             if (type == null) {
                 return;
