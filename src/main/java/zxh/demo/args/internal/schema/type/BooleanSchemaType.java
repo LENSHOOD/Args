@@ -31,7 +31,7 @@ public class BooleanSchemaType implements SchemaType<Boolean> {
         try {
             return Boolean.parseBoolean(input);
         } catch (Exception e) {
-            throw new SchemaTypeException(e.getMessage());
+            throw new SchemaTypeException(String.format("Get schema type error: %s", e.getMessage()));
         }
     }
 
