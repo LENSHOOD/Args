@@ -5,7 +5,7 @@ package zxh.demo.args.internal.schema.type;
  * @author zhangxuhai
  * @date 2019-07-31
 */
-public class BooleanSchemaType extends SchemaType<Boolean> {
+public class BooleanSchemaType implements SchemaType<Boolean> {
 
     private static final Boolean DEFAULT = Boolean.FALSE;
     private static final BooleanSchemaType SELF = new BooleanSchemaType();
@@ -25,10 +25,14 @@ public class BooleanSchemaType extends SchemaType<Boolean> {
         }
 
         if (!"true".equalsIgnoreCase(input) && !"false".equalsIgnoreCase(input)) {
-            throw new RuntimeException("");
+            throw new SchemaTypeException(String.format("Get schema type error: %s", input));
         }
 
-        return Boolean.parseBoolean(input);
+        try {
+            return Boolean.parseBoolean(input);
+        } catch (Exception e) {
+            throw new SchemaTypeException(e.getMessage());
+        }
     }
 
     @Override

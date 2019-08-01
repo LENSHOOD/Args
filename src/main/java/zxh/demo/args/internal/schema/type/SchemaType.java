@@ -5,9 +5,9 @@ package zxh.demo.args.internal.schema.type;
  * @author zhangxuhai
  * @date 2019-07-31
 */
-public abstract class SchemaType<T> {
+public interface SchemaType<T> {
 
-    public abstract T parse(String input);
+    T parse(String input);
 
-    public abstract T getDefault();
+    T getDefault();
 }

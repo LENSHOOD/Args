@@ -2,6 +2,7 @@ package zxh.demo.args;
 
 import zxh.demo.args.internal.analyzer.Analyzer;
 import zxh.demo.args.internal.schema.Schema;
+import zxh.demo.args.internal.schema.type.SchemaTypeException;
 
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class Parser {
                     (k, v) -> result.setFlagAndValue(k, schema.get(k).parse(v))
             );
 
-        } catch (Analyzer.AnalyzeException e) {
+        } catch (Analyzer.AnalyzeException | SchemaTypeException e) {
             throw new ParserException(e.getMessage());
         }
         return result;

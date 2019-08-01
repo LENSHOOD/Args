@@ -17,10 +17,9 @@ public class ParserTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    @Ignore
     public void validate_input_boolean_type_get_empty_string() {
         Parser parser = new Parser("b:boolean");
-        Assert.assertEquals("", parser.parse("-b").getFlag("b"));
+        Assert.assertEquals(Boolean.TRUE, parser.parse("-b").getFlag("b"));
     }
     
     @Test

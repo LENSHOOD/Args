@@ -4,6 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import zxh.demo.args.internal.schema.type.BooleanSchemaType;
+import zxh.demo.args.internal.schema.type.SchemaTypeException;
 import zxh.demo.args.internal.schema.type.StringSchemaType;
 
 import static org.junit.Assert.*;
@@ -53,7 +54,7 @@ public class SchemaTest {
     @Test
     public void validate_wrong_boolean_schema() {
         Schema schema = new Schema("b:boolean");
-        expectedException.expect(Schema.SchemaException.class);
+        expectedException.expect(SchemaTypeException.class);
         expectedException.expectMessage("Get schema type error: yes");
         schema.get("b").parse("yes");
     }
