@@ -1,7 +1,6 @@
 package zxh.demo.args;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -41,21 +40,26 @@ public class ParserTest {
     }
     
     @Test
-    @Ignore
     public void validate_double_array_get_double_array_string() {
-        Parser parser = new Parser("f:double");
-        Assert.assertEquals("-10.1,11,12.0", parser.parse("-d -10.1,11,12.0").getFlag("d"));
+        Parser parser = new Parser("d:double");
+        Assert.assertArrayEquals(new Double[]{-10.1,11.0,12.0}, (Double[]) parser.parse("-d -10.1,11,12.0").getFlag("d"));
     }
-    
+
     @Test
-    @Ignore
+    public void validate_double_array_get_string_array() {
+        Parser parser = new Parser("s:string");
+        Assert.assertArrayEquals(new String[]{"i", "am", "string"}, (String[]) parser.parse("-s i,am,string").getFlag("s"));
+    }
+
+
+    @Test
     public void validate_full_type_get_full_string() {
         Parser parser = new Parser("b:boolean, l:integer, d:double, s:string");
         ParserResult result = parser.parse("-b -l 8080 -s iamstring -d -10.1,11,12.0");
-        Assert.assertEquals("", result.getFlag("b"));
-        Assert.assertEquals("8080", result.getFlag("l"));
+        Assert.assertEquals(Boolean.TRUE, result.getFlag("b"));
+        Assert.assertEquals(8080, result.getFlag("l"));
         Assert.assertEquals("iamstring", result.getFlag("s"));
-        Assert.assertEquals("-10.1,11,12.0", result.getFlag("d"));
+        Assert.assertArrayEquals(new Double[]{-10.1,11.0,12.0}, (Double[]) parser.parse("-d -10.1,11,12.0").getFlag("d"));
     }
 
     @Test
