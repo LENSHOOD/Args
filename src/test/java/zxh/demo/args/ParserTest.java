@@ -39,8 +39,17 @@ public class ParserTest {
     public void validate_string() {
         String input = "-s iamstring";
         Parser parser = new Parser();
+        parser.build("s:string");
         parser.parse(input);
         assertEquals("iamstring", parser.get("s"));
+    }
+
+    @Test
+    public void validate_string_default() {
+        Parser parser = new Parser();
+        parser.build("s:string");
+        parser.parse("-f others");
+        assertEquals("", parser.get("s"));
     }
     
     @Test
