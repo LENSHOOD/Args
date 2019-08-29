@@ -1,9 +1,10 @@
 package zxh.demo.args;
 
 import zxh.demo.args.internal.Analyzer;
+import zxh.demo.args.internal.Schema;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Parser:
@@ -11,33 +12,35 @@ import java.util.Map;
  * @date 2019-08-27
 */
 public class Parser {
-    private Map<String, String> schemaMap = new HashMap<>();
-    private Map<String, String> flagValueMap = new HashMap<>();
+    private Schema schema = null;
+    private Map<String, Object> flagValueMap;
 
     public void parse(String input) {
+        if (Objects.isNull(schema)) {
+            throw new ParserException("Invalid parser: not call build() before parse().");
+        }
+
         try {
-            initSchemaDefaultValue(schemaMap);
             flagValueMap.putAll(Analyzer.analyze(input));
         } catch (Exception e) {
             throw new ParserException(e.getMessage());
         }
     }
 
-    public String get(String flag) {
+    public Object get(String flag) {
         return flagValueMap.get(flag);
     }
 
     public void build(String schemaString) {
-        String[] flagAndType = schemaString.split(":");
-        String flag = flagAndType[0];
-        String type = flagAndType[1];
-
-        if ("string".equalsIgnoreCase(type)) {
-            schemaMap.put(flag, "");
+        try {
+            schema = new Schema(schemaString);
+            initSchemaDefaultValue();
+        } catch (Exception e) {
+            throw new ParserException(e.getMessage());
         }
     }
 
-    private void initSchemaDefaultValue(Map<String, String> schemaMap) {
-        flagValueMap.putAll(schemaMap);
+    private void initSchemaDefaultValue() {
+        flagValueMap = schema.getFlagAndDefaultValues();
     }
 }
