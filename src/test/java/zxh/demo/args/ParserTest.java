@@ -13,14 +13,32 @@ public class ParserTest {
     public ExpectedException expectedException = ExpectedException.none();
     
     @Test
-    @Ignore
     public void validate_boolean() {
         String input = "-b";
         Parser parser = new Parser();
+        parser.build("b:boolean");
         parser.parse(input);
-        assertEquals("", parser.get("b"));
+        assertEquals(Boolean.TRUE, parser.get("b"));
     }
-    
+
+    @Test
+    public void validate_boolean_default() {
+        Parser parser = new Parser();
+        parser.build("b:boolean");
+        parser.parse("-f others");
+        assertEquals(Boolean.FALSE, parser.get("b"));
+    }
+
+    @Test
+    public void validate_boolean_wrong_valueOf() {
+        String input = "-b yes";
+        Parser parser = new Parser();
+        parser.build("b:boolean");
+        expectedException.expect(ParserException.class);
+        expectedException.expectMessage("Invalid input value: yes");
+        parser.parse(input);
+    }
+
     @Test
     @Ignore
     public void validate_integer() {
@@ -78,6 +96,7 @@ public class ParserTest {
     }
     
     @Test
+    @Ignore
     public void validate_wrong_flag_format() {
         String input = "-i 8080 d -20.1";
         Parser parser = new Parser();

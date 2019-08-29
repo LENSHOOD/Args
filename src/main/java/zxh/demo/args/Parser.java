@@ -21,7 +21,8 @@ public class Parser {
         }
 
         try {
-            flagValueMap.putAll(Analyzer.analyze(input));
+            Analyzer.analyze(input).forEach((flag, stringValue) ->
+                    flagValueMap.put(flag, schema.getTypeByFlag(flag).valueOf(stringValue)));
         } catch (Exception e) {
             throw new ParserException(e.getMessage());
         }

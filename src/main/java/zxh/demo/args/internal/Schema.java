@@ -1,6 +1,8 @@
 package zxh.demo.args.internal;
 
 import zxh.demo.args.internal.exception.SchemaException;
+import zxh.demo.args.internal.type.BooleanSchemaType;
+import zxh.demo.args.internal.type.EmptySchemaType;
 import zxh.demo.args.internal.type.SchemaType;
 import zxh.demo.args.internal.type.StringSchemaType;
 
@@ -16,6 +18,7 @@ public class Schema {
     private static Map<String, SchemaType> schemaMap = new HashMap<>(1);
     static {
         schemaMap.put("string", new StringSchemaType());
+        schemaMap.put("boolean", new BooleanSchemaType());
     }
 
     private Map<String, SchemaType> flagTypeMap = new HashMap<>();
@@ -39,6 +42,10 @@ public class Schema {
     }
 
     public SchemaType getTypeByFlag(String flag) {
+        if (!flagTypeMap.containsKey(flag)) {
+            return new EmptySchemaType();
+        }
+
         return flagTypeMap.get(flag);
     }
 
