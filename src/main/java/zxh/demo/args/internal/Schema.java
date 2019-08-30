@@ -17,6 +17,7 @@ public class Schema {
         schemaMap.put("string", new StringSchemaType());
         schemaMap.put("boolean", new BooleanSchemaType());
         schemaMap.put("integer", new IntegerSchemaType());
+        schemaMap.put("double", new DoubleSchemaType());
     }
 
     private Map<String, SchemaType> flagTypeMap = new HashMap<>();

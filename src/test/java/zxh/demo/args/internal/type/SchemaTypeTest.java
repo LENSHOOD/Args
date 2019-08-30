@@ -58,4 +58,27 @@ public class SchemaTypeTest {
         schemaType.valueOf("");
     }
 
+    @Test
+    public void validate_double_type() {
+        SchemaType schemaType = new DoubleSchemaType();
+        assertEquals(-20.1, schemaType.valueOf("-20.1"));
+        assertEquals(0D, schemaType.getDefault());
+    }
+
+    @Test
+    public void validate_double_wrong_input() {
+        SchemaType schemaType = new DoubleSchemaType();
+        expectedException.expect(SchemaException.class);
+        expectedException.expectMessage("Invalid input value: 17.a");
+        schemaType.valueOf("17.a");
+    }
+
+    @Test
+    public void validate_double_empty_input() {
+        SchemaType schemaType = new DoubleSchemaType();
+        expectedException.expect(SchemaException.class);
+        expectedException.expectMessage("Invalid input value: null");
+        schemaType.valueOf("");
+    }
+
 }

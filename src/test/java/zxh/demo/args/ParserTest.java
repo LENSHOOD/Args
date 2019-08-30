@@ -59,14 +59,24 @@ public class ParserTest {
     }
     
     @Test
-    @Ignore
     public void validate_double() {
         String input = "-d -20.1";
         Parser parser = new Parser();
+        parser.build("d:double");
         parser.parse(input);
-        assertEquals("-20.1", parser.get("d"));
+        assertEquals(-20.1, parser.get("d"));
     }
-    
+
+    @Test
+    public void validate_double_wrong_input() {
+        String input = "-d 17.a";
+        Parser parser = new Parser();
+        parser.build("d:double");
+        expectedException.expect(ParserException.class);
+        expectedException.expectMessage("Invalid input value: 17.a");
+        parser.parse(input);
+    }
+
     @Test
     public void validate_string() {
         String input = "-s iamstring";
