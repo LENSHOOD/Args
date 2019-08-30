@@ -40,12 +40,22 @@ public class ParserTest {
     }
 
     @Test
-    @Ignore
     public void validate_integer() {
         String input = "-i 8080";
         Parser parser = new Parser();
+        parser.build("i:integer");
         parser.parse(input);
-        assertEquals("8080", parser.get("i"));
+        assertEquals(8080, parser.get("i"));
+    }
+
+    @Test
+    public void validate_integer_wrong_valueOf() {
+        String input = "-i 8a0b8c0d";
+        Parser parser = new Parser();
+        parser.build("i:integer");
+        expectedException.expect(ParserException.class);
+        expectedException.expectMessage("Invalid input value: 8a0b8c0d");
+        parser.parse(input);
     }
     
     @Test
