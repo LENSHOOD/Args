@@ -5,6 +5,7 @@ import zxh.demo.args.internal.type.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Schema:
@@ -23,6 +24,10 @@ public class Schema {
     private Map<String, SchemaType> flagTypeMap = new HashMap<>();
 
     public Schema(String schemaString) {
+        Stream.of(schemaString.trim().split(",")).forEach(this::buildSingleSchemaType);
+    }
+
+    private void buildSingleSchemaType(String schemaString) {
         String[] flagAndType = schemaString.trim().split(":");
 
         if (flagAndType.length != 2) {

@@ -116,11 +116,10 @@ public class ParserTest {
     }
     
     @Test
-    @Ignore
     public void validate_wrong_flag_format() {
         String input = "-i 8080 d -20.1";
         Parser parser = new Parser();
-
+        parser.build("i:integer, d:double");
         expectedException.expect(ParserException.class);
         expectedException.expectMessage("Invalid integer type flag i of value: 8080 d -20.1");
         parser.parse(input);
