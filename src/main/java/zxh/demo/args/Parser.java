@@ -17,6 +17,22 @@ public class Parser {
     private Schema schema = null;
     private Map<String, Object> flagValueMap;
 
+    private Parser() {
+        // should be empty
+    }
+
+    public static Parser build(String schemaString) {
+        Parser parser = new Parser();
+        try {
+            parser.schema = new Schema(schemaString);
+            parser.flagValueMap = parser.schema.getFlagAndDefaultValues();
+        } catch (Exception e) {
+            throw new ParserException(e.getMessage());
+        }
+
+        return parser;
+    }
+
     public void parse(String input) {
         if (Objects.isNull(schema)) {
             throw new ParserException("Invalid parser: not call build() before parse().");
@@ -50,18 +66,5 @@ public class Parser {
 
     public Object get(String flag) {
         return flagValueMap.get(flag);
-    }
-
-    public void build(String schemaString) {
-        try {
-            schema = new Schema(schemaString);
-            initSchemaDefaultValue();
-        } catch (Exception e) {
-            throw new ParserException(e.getMessage());
-        }
-    }
-
-    private void initSchemaDefaultValue() {
-        flagValueMap = schema.getFlagAndDefaultValues();
     }
 }
