@@ -1,11 +1,11 @@
 package zxh.demo.args;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ParserTest {
 
@@ -57,7 +57,16 @@ public class ParserTest {
         expectedException.expectMessage("Invalid input value: 8a0b8c0d");
         parser.parse(input);
     }
-    
+
+    @Test
+    public void validate_integer_array() {
+        String input = "-i 8080,999,-11";
+        Parser parser = new Parser();
+        parser.build("i:integer");
+        parser.parse(input);
+        assertArrayEquals(new Integer[]{8080, 999, -11}, (Integer[]) parser.get("i"));
+    }
+
     @Test
     public void validate_double() {
         String input = "-d -20.1";
@@ -78,6 +87,15 @@ public class ParserTest {
     }
 
     @Test
+    public void validate_double_array() {
+        String input = "-d -10.1,11,12.0";
+        Parser parser = new Parser();
+        parser.build("d:double");
+        parser.parse(input);
+        assertArrayEquals(new Double[]{-10.1,11.0,12.0}, (Double[]) parser.get("d"));
+    }
+
+    @Test
     public void validate_string() {
         String input = "-s iamstring";
         Parser parser = new Parser();
@@ -93,26 +111,26 @@ public class ParserTest {
         parser.parse("-f others");
         assertEquals("", parser.get("s"));
     }
-    
+
     @Test
-    @Ignore
-    public void validate_double_array() {
-        String input = "-d -10.1,11,12.0";
+    public void validate_string_array() {
+        String input = "-s i,am,string";
         Parser parser = new Parser();
+        parser.build("s:string");
         parser.parse(input);
-        assertEquals("-10.1,11,12.0", parser.get("d"));
+        assertArrayEquals(new String[]{"i", "am", "string"}, (String[])parser.get("s"));
     }
-    
+
     @Test
-    @Ignore
     public void validate_all_type() {
         String input = "-b -i 8080 -s iamstring -d -10.1,11,12.0";
         Parser parser = new Parser();
+        parser.build("b:boolean, s:string, d:double, i:integer");
         parser.parse(input);
-        assertEquals("", parser.get("b"));
-        assertEquals("8080", parser.get("i"));
+        assertEquals(Boolean.TRUE, parser.get("b"));
+        assertEquals(8080, parser.get("i"));
         assertEquals("iamstring", parser.get("s"));
-        assertEquals("-10.1,11,12.0", parser.get("d"));
+        assertArrayEquals(new Double[]{-10.1,11.0,12.0}, (Double[])parser.get("d"));
     }
     
     @Test

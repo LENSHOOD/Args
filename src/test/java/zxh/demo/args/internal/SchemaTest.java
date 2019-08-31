@@ -23,7 +23,7 @@ public class SchemaTest {
     public void validate_new_schema_wrong_input_string() {
         String wrongSchemaString = "s,string";
         expectedException.expect(SchemaException.class);
-        expectedException.expectMessage("Invalid input schema string: s,string");
+        expectedException.expectMessage("Invalid input schema string: s");
         new Schema(wrongSchemaString);
     }
 
