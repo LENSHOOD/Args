@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Schema:
  * @author zhangxuhai
@@ -24,15 +27,16 @@ public class Schema {
     private Map<String, SchemaType> flagTypeMap = new HashMap<>();
 
     public Schema(String schemaString) {
-        Stream.of(schemaString.trim().split(",")).forEach(this::buildSingleSchemaType);
+        Stream.of(checkNotNull(schemaString, "Invalid schema string of null.")
+                .trim()
+                .split(","))
+                .forEach(this::buildSingleSchemaType);
     }
 
     private void buildSingleSchemaType(String schemaString) {
         String[] flagAndType = schemaString.trim().split(":");
-
-        if (flagAndType.length != 2) {
-            throw new SchemaException(String.format("Invalid input schema string: %s", schemaString));
-        }
+        checkArgument(flagAndType.length == 2,
+                "Invalid input schema string: %s", schemaString);
 
         flagTypeMap.put(flagAndType[0], getSchemaTypeBy(flagAndType[1]));
     }

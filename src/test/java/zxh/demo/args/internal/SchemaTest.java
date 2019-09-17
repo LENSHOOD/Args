@@ -13,6 +13,13 @@ public class SchemaTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
+    public void validate_null_schema() {
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Invalid schema string of null.");
+        new Schema(null);
+    }
+
+    @Test
     public void validate_new_schema() {
         String schemaString = "s:string";
         assertEquals("", new Schema(schemaString).getTypeByFlag("s").getDefault());
@@ -22,7 +29,7 @@ public class SchemaTest {
     @Test
     public void validate_new_schema_wrong_input_string() {
         String wrongSchemaString = "s,string";
-        expectedException.expect(SchemaException.class);
+        expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Invalid input schema string: s");
         new Schema(wrongSchemaString);
     }
