@@ -28,15 +28,10 @@ public class Analyzer {
 
         Map<String, String> flagValueMap = new HashMap<>(16);
         for (int i = 0; i < minusFlagSpaceIndexes.size(); i++) {
-            Integer minusFlagSpaceIndex = minusFlagSpaceIndexes.get(i);
-            int valueStartIndex = minusFlagSpaceIndex + 2 >= input.length() ? input.length()-1 : minusFlagSpaceIndex + 2;
-            int valueEndIndex = i == minusFlagSpaceIndexes.size() - 1
-                    ? input.length() - 1
-                    : minusFlagSpaceIndexes.get(i + 1);
+            String[] flagValuePair = findFlagAndValue(input, minusFlagSpaceIndexes, i);
 
-            String flag = input.substring(minusFlagSpaceIndex + 1, minusFlagSpaceIndex + 2);
-            String value = input.substring(valueStartIndex, valueEndIndex).trim();
-
+            String flag = flagValuePair[0];
+            String value = flagValuePair[1];
             if (value.contains(" ")) {
                 throw new AnalyzeException(String.format("Invalid integer type flag %s of value: %s", flag, value));
             }
@@ -45,6 +40,19 @@ public class Analyzer {
         }
 
         return flagValueMap;
+    }
+
+    private static String[] findFlagAndValue(String input, List<Integer> minusFlagSpaceIndexes, int i) {
+        Integer minusFlagSpaceIndex = minusFlagSpaceIndexes.get(i);
+        int valueStartIndex = minusFlagSpaceIndex + 2 >= input.length() ? input.length()-1 : minusFlagSpaceIndex + 2;
+        int valueEndIndex = i == minusFlagSpaceIndexes.size() - 1
+                ? input.length() - 1
+                : minusFlagSpaceIndexes.get(i + 1);
+
+        return new String[]{
+                input.substring(minusFlagSpaceIndex + 1, minusFlagSpaceIndex + 2),
+                input.substring(valueStartIndex, valueEndIndex).trim()
+        };
     }
 
     private static List<Integer> findMinusFlagSpaceIndexes(String input) {
