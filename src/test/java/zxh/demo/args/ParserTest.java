@@ -4,9 +4,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -130,15 +127,5 @@ public class ParserTest {
         expectedException.expect(ParserException.class);
         expectedException.expectMessage("Invalid integer type flag i of value: 8080 d -20.1");
         parser.parse(input);
-    }
-
-    @Test
-    public void validate_parser_not_init() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        expectedException.expect(ParserException.class);
-        expectedException.expectMessage("Invalid parser: not call build() before parse().");
-        Constructor constructor = Parser.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        Parser parser = (Parser) constructor.newInstance();
-        parser.parse("");
     }
 }
